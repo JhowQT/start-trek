@@ -10,8 +10,10 @@ public class UsuarioResponseDTO {
     private Long idUsuario;
     private String nomeUsuario;
     private String email;
-    private String idTipoUsuario;
+
+    private Long idTipoUsuario;
     private String nomeTipoUsuario;
+
     private String ativo;
     private String fotoBase64;
 
