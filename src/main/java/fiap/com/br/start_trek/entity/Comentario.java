@@ -27,7 +27,7 @@ public class Comentario {
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id_trilha_carreira", nullable = false)
+    @JoinColumn(name = "id_trabalho", nullable = false)
     private Trabalho Trabalho;
 
 }
