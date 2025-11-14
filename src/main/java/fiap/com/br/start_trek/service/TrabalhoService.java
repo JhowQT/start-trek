@@ -33,15 +33,23 @@ public class TrabalhoService {
         Trabalho existente = buscarPorID(id);
 
         if(novoTrabalho.getNomeTrabalho() != null){
-
+            validarNomeELimite(novoTrabalho.getNomeTrabalho());
+            validarDuplicidadeDeTitulo(novoTrabalho.getNomeTrabalho(),id);
+            existente.setConteudoTrabalho(novoTrabalho.getNomeTrabalho());
         }
-        if(){
-
+        if(novoTrabalho.getConteudoTrabalho() != null){
+            existente.setConteudoTrabalho(novoTrabalho.getConteudoTrabalho());
         }
-        return 
+        return trabalhoRepository.save(existente);
     }
 
-
+    public void excluir(Long id){
+        if(!trabalhoRepository.existsById(id)){
+            throw new RuntimeException("Id deste trabalho não existe: " + id);
+        }
+        trabalhoRepository.deleteById(id);
+    }
+    
     private void validarNomeELimite(String titulo){
         if(titulo == null || titulo.trim().isEmpty()){
             throw new RuntimeException("Nome para este campo obrigatorio");
