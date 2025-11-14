@@ -28,6 +28,6 @@ public class Comentario {
 
     @ManyToOne
     @JoinColumn(name = "id_trabalho", nullable = false)
-    private Trabalho Trabalho;
+    private Trabalho trabalho;
 
 }

@@ -7,7 +7,7 @@ import lombok.*;
 public class ComentarioCreateDTO {
     
     private String conteudoComentario;
-    private String ativoComentario;
+    private String ativoComentario = "1";
     private Long idUsuario;
     private Long idTrabalho;
 

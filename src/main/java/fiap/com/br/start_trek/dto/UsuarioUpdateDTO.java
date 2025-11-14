@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioUpdate {
+public class UsuarioUpdateDTO {
     private String nomeUsuario;
     private String email;
     private String senha;
