@@ -1,9 +1,8 @@
 package fiap.com.br.start_trek;
 
-import java.util.Scanner;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.util.Scanner;
 
 @SpringBootApplication
 public class StartTrekApplication {
@@ -12,10 +11,10 @@ public class StartTrekApplication {
 
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.println("DIGITE O RM: ");
+		System.out.print("DIGITE O RM: ");
 		String user = scanner.nextLine().trim();		// trim para tirar os espaços no inicio e final
 
-		System.out.println("DIGITE A SENHA: ");
+		System.out.print("DIGITE A SENHA: ");
 		String password = scanner.nextLine().trim();	// trim para tirar os espaçõs inicio e final
 
 		System.setProperty("DB_USER", user);

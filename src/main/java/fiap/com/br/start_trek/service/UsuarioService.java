@@ -21,7 +21,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO cadastraUsuario(UsuarioCreateDTO dto){
 
-        if(usuarioRepository.exexistsByEmail(dto.getEmail())){
+        if(usuarioRepository.existsByEmail(dto.getEmail())){
             throw new RuntimeException("Já existe um Usuario com este email cadastro");
         }
 

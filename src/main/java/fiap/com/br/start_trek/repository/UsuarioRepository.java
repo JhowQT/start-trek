@@ -7,5 +7,5 @@ import fiap.com.br.start_trek.entity.*;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    boolean exexistsByEmail(String email);
+    boolean existsByEmail(String email);
 }
