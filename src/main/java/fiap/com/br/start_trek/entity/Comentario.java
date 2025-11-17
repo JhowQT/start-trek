@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "T_OR_COMENTARIO")
+@Table(name = "T_ST_COMENTARIO")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

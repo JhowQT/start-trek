@@ -5,6 +5,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.*;
 
 import fiap.com.br.start_trek.dto.*;
 import fiap.com.br.start_trek.entity.*;
@@ -49,6 +50,12 @@ public class UsuarioService {
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
+
+    public Page<UsuarioResponseDTO> listarUsuariosPaginado(Pageable pageable) {
+    return usuarioRepository.findAll(pageable)
+            .map(this::toResponseDTO);
+}
+
 
     public UsuarioResponseDTO buscarUsuarioPorId(Long id){
         Usuario usuario = usuarioRepository.findById(id)
