@@ -2,9 +2,14 @@ package fiap.com.br.start_trek;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import fiap.com.br.start_trek.config.RsaKeysProperties;
+
 import java.util.Scanner;
 
 @SpringBootApplication
+@EnableConfigurationProperties(RsaKeysProperties.class)
 public class StartTrekApplication {
 
 	public static void main(String[] args) {
