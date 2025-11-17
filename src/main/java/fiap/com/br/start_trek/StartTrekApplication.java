@@ -18,7 +18,7 @@ public class StartTrekApplication {
 		String password = scanner.nextLine().trim();	// trim para tirar os espaçõs inicio e final
 
 		System.setProperty("DB_USER", user);
-		System.setProperty("BD_PASSWORD", password);
+		System.setProperty("DB_PASSWORD", password);
 		
 		System.out.println("\nCredencias Oracle definidas com sucesso!");
 		System.out.println("Iniciando aplicação Orangue-Oracle...\n");
