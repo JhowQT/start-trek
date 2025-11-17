@@ -35,7 +35,7 @@ public class TrabalhoService {
         if(novoTrabalho.getNomeTrabalho() != null){
             validarNomeELimite(novoTrabalho.getNomeTrabalho());
             validarDuplicidadeDeTitulo(novoTrabalho.getNomeTrabalho(),id);
-            existente.setConteudoTrabalho(novoTrabalho.getNomeTrabalho());
+            existente.setNomeTrabalho(novoTrabalho.getNomeTrabalho());
         }
         if(novoTrabalho.getConteudoTrabalho() != null){
             existente.setConteudoTrabalho(novoTrabalho.getConteudoTrabalho());
@@ -55,7 +55,7 @@ public class TrabalhoService {
             throw new RuntimeException("Nome para este campo obrigatorio");
         }
         if(titulo.length() > 150){
-            throw new RuntimeException("Limite de 100 caracteres excedido para este campo");
+            throw new RuntimeException("Limite de 150 caracteres excedido para este campo");
         }
     }
 
