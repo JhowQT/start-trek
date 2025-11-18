@@ -12,8 +12,9 @@ import fiap.com.br.start_trek.entity.Usuario;
 import fiap.com.br.start_trek.repository.UsuarioRepository;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
-
+public class CustomUserDetailsService implements UserDetailsService {  // Ponte entro o Spring security e o banco de dados
+    // busca o user que esta no BD
+    // devolve no formato UserDetails do Spring Security
     private final UsuarioRepository usuarioRepository;
 
     public CustomUserDetailsService(UsuarioRepository usuarioRepository) {

@@ -27,7 +27,7 @@ public class SecurityConfig {
         this.rsaKeys = rsaKeys;
     }
 
-    // 🔐 1) Configuração da cadeia de segurança
+    // Configuração da cadeia de segurança
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -47,13 +47,13 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 🔐 2) Decodificador JWT (usa PUBLIC KEY)
+    // Decodificador JWT (usa PUBLIC KEY)
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
 
-    // 🔐 3) Codificador JWT (usa PRIVATE KEY + PUBLIC KEY)
+    // Codificador JWT (usa PRIVATE KEY + PUBLIC KEY)
     @Bean
     public JwtEncoder jwtEncoder() {
 
@@ -67,13 +67,13 @@ public class SecurityConfig {
         return new NimbusJwtEncoder(jwks);
     }
 
-    // 🔐 4) BCrypt (para senhas)
+    // BCrypt (para senhas)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // 🔐 5) AuthenticationManager (para autenticar o login)
+    // AuthenticationManager (para autenticar o login)
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {
