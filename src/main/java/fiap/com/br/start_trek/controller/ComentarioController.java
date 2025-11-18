@@ -7,8 +7,9 @@ import fiap.com.br.start_trek.service.ComentarioService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.*;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -34,7 +35,7 @@ public class ComentarioController {
             Page<ComentarioResponseDTO> pagina =
                     new PageImpl<>(lista.subList(start, end), pageable, lista.size());
 
-            return ResponseEntity.ok(pagina); 
+            return ResponseEntity.ok(pagina);
 
         } catch (Exception e) {
             Map<String, Object> erro = new LinkedHashMap<>();
@@ -64,7 +65,12 @@ public class ComentarioController {
     @PostMapping
     public ResponseEntity<?> criar(@RequestBody ComentarioCreateDTO dto) {
         try {
-            ComentarioResponseDTO salvo = comentarioService.criarComentario(dto);
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String emailUsuarioLogado = auth.getName();  // <-- vem do token JWT
+
+            ComentarioResponseDTO salvo = comentarioService.criarComentario(dto, emailUsuarioLogado);
+
             return ResponseEntity.status(201).body(salvo);
 
         } catch (RuntimeException e) {
@@ -78,5 +84,4 @@ public class ComentarioController {
             return ResponseEntity.status(500).body(erro);
         }
     }
-
 }
