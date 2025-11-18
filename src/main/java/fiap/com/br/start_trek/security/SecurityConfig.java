@@ -29,7 +29,7 @@ public class SecurityConfig {
 
     // Configuração da cadeia de segurança
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { // filtro de requisições
 
         http
             .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
