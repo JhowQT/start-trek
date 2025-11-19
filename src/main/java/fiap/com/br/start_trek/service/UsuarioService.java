@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.*;
 
@@ -12,13 +13,13 @@ import fiap.com.br.start_trek.entity.*;
 import fiap.com.br.start_trek.repository.*;
 import lombok.RequiredArgsConstructor;
 
-
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
     
     private final UsuarioRepository usuarioRepository;
     private final TipoUsuarioRepository tipoUsuarioRepository;
+    private final Esp32Repository esp32Repository;
 
     public UsuarioResponseDTO cadastraUsuario(UsuarioCreateDTO dto){
 
@@ -33,12 +34,19 @@ public class UsuarioService {
             throw new RuntimeException("A senha deve ter pelo menos 8 caracteres.");
         }
 
+        // BUSCAR ESP32 PADRÃO (ID = 1)
+        Esp32 esp32Padrao = esp32Repository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("ESP32 padrão (ID 1) não encontrado no banco."));
+
         Usuario novoUsuario = new Usuario();
         novoUsuario.setNomeUsuario(dto.getNomeUsuario());
         novoUsuario.setEmail(dto.getEmail());
         novoUsuario.setSenha(dto.getSenha());
         novoUsuario.setTipoUsuario(tipoUsuario);
         novoUsuario.setAtivo("1");
+
+        // ATRIBUI O ESP32 AUTOMATICAMENTE
+        novoUsuario.setEsp32(esp32Padrao);
 
         Usuario salvo = usuarioRepository.save(novoUsuario);
         return toResponseDTO(salvo);
@@ -52,10 +60,9 @@ public class UsuarioService {
     }
 
     public Page<UsuarioResponseDTO> listarUsuariosPaginado(Pageable pageable) {
-    return usuarioRepository.findAll(pageable)
-            .map(this::toResponseDTO);
-}
-
+        return usuarioRepository.findAll(pageable)
+                .map(this::toResponseDTO);
+    }
 
     public UsuarioResponseDTO buscarUsuarioPorId(Long id){
         Usuario usuario = usuarioRepository.findById(id)
@@ -66,35 +73,40 @@ public class UsuarioService {
     public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioUpdateDTO dto){
        
         Usuario existente = usuarioRepository.findById(id)
-            .orElseThrow(()-> new RuntimeException("Usuario não encontrado" + id));
+            .orElseThrow(() -> new RuntimeException("Usuario não encontrado: " + id));
 
         if(dto.getNomeUsuario() != null && !dto.getNomeUsuario().isBlank())
             existente.setNomeUsuario(dto.getNomeUsuario());
+
         if(dto.getEmail() != null && !dto.getEmail().isBlank())
             existente.setEmail(dto.getEmail());
+
         if(dto.getSenha() != null && !dto.getSenha().isBlank()){
             if(dto.getSenha().length() < 8)
                 throw new RuntimeException("A senha deve ter 8 caracteres no minimo.");
             existente.setSenha(dto.getSenha());
         }
+
         if(dto.getIdTipoUsuario() != null){
             TipoUsuario tipo = tipoUsuarioRepository.findById(dto.getIdTipoUsuario())
                 .orElseThrow(() -> new RuntimeException("Tipo de usuario invalido."));
             existente.setTipoUsuario(tipo);
         }
+
         Usuario atualizado = usuarioRepository.save(existente);
         return toResponseDTO(atualizado);
     }
 
-    public UsuarioResponseDTO atualizarFoto(Long id, UsuarioFotoDTO dto) throws java.io.IOException{
+    public UsuarioResponseDTO atualizarFoto(Long id, UsuarioFotoDTO dto) throws IOException {
         Usuario usuario = usuarioRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuario não encontrado com o ID: " + id));
 
         try {
             usuario.setFoto(dto.getFoto().getBytes());
-        }catch(IOException e){
+        } catch(IOException e){
             throw new RuntimeException("Erro ao processar a foto do usuario.");
         }
+
         Usuario atualizado = usuarioRepository.save(usuario);
         return toResponseDTO(atualizado);
     }
@@ -109,7 +121,7 @@ public class UsuarioService {
     private UsuarioResponseDTO toResponseDTO(Usuario usuario){
         String fotoBase64 = null;
 
-        if (usuario.getFoto() != null &&  usuario.getFoto().length > 0){
+        if (usuario.getFoto() != null && usuario.getFoto().length > 0){
             fotoBase64 = Base64.getEncoder().encodeToString(usuario.getFoto());
         }
         
@@ -118,7 +130,6 @@ public class UsuarioService {
                 usuario.getNomeUsuario(),
                 usuario.getEmail(),
                 usuario.getTipoUsuario().getIdTipoUsuario(),
-
                 usuario.getTipoUsuario().getNomeTipoUsuario(),
                 usuario.getAtivo(),
                 fotoBase64
