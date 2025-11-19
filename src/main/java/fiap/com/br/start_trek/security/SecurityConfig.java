@@ -5,7 +5,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -13,9 +13,12 @@ import fiap.com.br.start_trek.config.RsaKeysProperties;
 
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.http.HttpMethod;
+
 import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.jwk.source.*;
 import com.nimbusds.jose.proc.SecurityContext;
+
+import org.springframework.web.cors.*;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +34,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .csrf(csrf -> csrf.disable()) // API → CSRF desabilitado
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth
 
                 // ROTAS PÚBLICAS
@@ -42,7 +46,7 @@ public class SecurityConfig {
                 // LIBERAR GET comentários
                 .requestMatchers(HttpMethod.GET, "/comentarios/**").permitAll()
 
-                // BLOQUEAR o POST
+                // BLOQUEAR o POST PARA LOGIN OBRIGATÓRIO
                 .requestMatchers(HttpMethod.POST, "/comentarios").authenticated()
 
                 // RESTANTE É PÚBLICO
@@ -67,16 +71,16 @@ public class SecurityConfig {
                 .privateKey(rsaKeys.privateKey())
                 .build();
 
-        JWKSource<SecurityContext> jwks = 
+        JWKSource<SecurityContext> jwks =
                 new ImmutableJWKSet<>(new JWKSet(jwk));
 
         return new NimbusJwtEncoder(jwks);
     }
 
-    // BCrypt
+    // 🔥 AGORA SENHA TEXTO → SENHA TEXTO (SEM CRIPTOGRAFIA)
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
 
     // AuthenticationManager
@@ -84,5 +88,19 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    // CORS → resolve todos os "blocked by CORS"
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOriginPattern("*");
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        config.setAllowCredentials(false);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
