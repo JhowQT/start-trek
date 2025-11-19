@@ -47,7 +47,8 @@ public class ComentarioController {
     @GetMapping("/trabalho/{idTrabalho}")
     public ResponseEntity<?> listarPorTrabalho(@PathVariable Long idTrabalho) {
         try {
-            List<ComentarioResponseDTO> lista = comentarioService.listarPortrilha(idTrabalho);
+            List<ComentarioResponseDTO> lista = comentarioService.listarPorTrabalho(idTrabalho);
+
             return ResponseEntity.ok(lista);
 
         } catch (RuntimeException e) {

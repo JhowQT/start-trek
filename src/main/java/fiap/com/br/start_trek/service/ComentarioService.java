@@ -33,18 +33,19 @@ public class ComentarioService {
                 .collect(Collectors.toList());
     }
 
-    public List<ComentarioResponseDTO> listarPortrilha(Long idTrilha) {
-        return comentarioRepository.findByTrabalhoIdTrabalho(idTrilha)
-                .stream()
-                .map(c -> new ComentarioResponseDTO(
-                        c.getIdComentario(),
-                        c.getTrabalho().getIdTrabalho(),
-                        c.getUsuario().getIdUsuario(),
-                        c.getConteudoComentario(),
-                        c.getUsuario().getNomeUsuario(),
-                        c.getTrabalho().getNomeTrabalho()))
-                .collect(Collectors.toList());
-    }
+    public List<ComentarioResponseDTO> listarPorTrabalho(Long idTrabalho) {
+    return comentarioRepository.findByTrabalhoIdTrabalho(idTrabalho)
+            .stream()
+            .map(c -> new ComentarioResponseDTO(
+                    c.getIdComentario(),
+                    c.getTrabalho().getIdTrabalho(),
+                    c.getUsuario().getIdUsuario(),
+                    c.getConteudoComentario(),
+                    c.getUsuario().getNomeUsuario(),
+                    c.getTrabalho().getNomeTrabalho()
+            ))
+            .collect(Collectors.toList());
+}
 
     @Transactional
     public ComentarioResponseDTO criarComentario(ComentarioCreateDTO dto, String emailUsuarioLogado) {
