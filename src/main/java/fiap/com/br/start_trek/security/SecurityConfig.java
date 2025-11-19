@@ -1,6 +1,5 @@
 package fiap.com.br.start_trek.security;
 
-
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -13,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import fiap.com.br.start_trek.config.RsaKeysProperties;
 
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.http.HttpMethod;
 import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.jwk.source.*;
 import com.nimbusds.jose.proc.SecurityContext;
@@ -27,33 +27,39 @@ public class SecurityConfig {
         this.rsaKeys = rsaKeys;
     }
 
-    // Configuração da cadeia de segurança
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { // filtro de requisições
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs REST
+            .csrf(csrf -> csrf.disable()) // API → CSRF desabilitado
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login").permitAll()       // Rota pública
-                .requestMatchers("/usuarios").permitAll()         // Cadastro público
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger liberado
-                .requestMatchers("/comentarios/**").authenticated() // Só logado comenta
-                .anyRequest().permitAll()                          // Restante público
+
+                // ROTAS PÚBLICAS
+                .requestMatchers("/auth/login").permitAll()
+                .requestMatchers("/usuarios").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                // LIBERAR GET comentários
+                .requestMatchers(HttpMethod.GET, "/comentarios/**").permitAll()
+
+                // BLOQUEAR o POST
+                .requestMatchers(HttpMethod.POST, "/comentarios").authenticated()
+
+                // RESTANTE É PÚBLICO
+                .anyRequest().permitAll()
             )
-            .oauth2ResourceServer(oauth -> oauth
-                .jwt() // Habilita validação JWT pela public key
-            );
+            .oauth2ResourceServer(oauth -> oauth.jwt());
 
         return http.build();
     }
 
-    // Decodificador JWT (usa PUBLIC KEY)
+    // Decodificador JWT
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
 
-    // Codificador JWT (usa PRIVATE KEY + PUBLIC KEY)
+    // Codificador JWT
     @Bean
     public JwtEncoder jwtEncoder() {
 
@@ -61,19 +67,19 @@ public class SecurityConfig {
                 .privateKey(rsaKeys.privateKey())
                 .build();
 
-        JWKSource<SecurityContext> jwks =
+        JWKSource<SecurityContext> jwks = 
                 new ImmutableJWKSet<>(new JWKSet(jwk));
 
         return new NimbusJwtEncoder(jwks);
     }
 
-    // BCrypt (para senhas)
+    // BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // AuthenticationManager (para autenticar o login)
+    // AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {
