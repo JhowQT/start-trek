@@ -21,8 +21,4 @@ public class Categoria {
     @Lob
     @Column(name = "cd_categoria", nullable = false)
     private String conteudoCategoria;
-
-    @ManyToOne
-    @JoinColumn(name = "id_trabalho", nullable = false)
-    private Trabalho trabalho;
 }

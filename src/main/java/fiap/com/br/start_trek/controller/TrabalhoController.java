@@ -22,7 +22,6 @@ public class TrabalhoController {
 
     private final TrabalhoService trabalhoService;
 
-
     @GetMapping
     public ResponseEntity<?> listar(Pageable pageable) {
         try {
@@ -41,6 +40,19 @@ public class TrabalhoController {
         }
     }
 
+    @GetMapping("/categoria/{idCategoria}")
+    public ResponseEntity<?> listarPorCategoria(@PathVariable Long idCategoria) {
+        try {
+            List<Trabalho> lista = trabalhoService.listarPorCategoria(idCategoria);
+            return ResponseEntity.ok(lista);
+
+        } catch (RuntimeException e) {
+            Map<String, Object> erro = new LinkedHashMap<>();
+            erro.put("message", e.getMessage());
+            return ResponseEntity.status(404).body(erro);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         try {
@@ -54,10 +66,12 @@ public class TrabalhoController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody Trabalho trabalho) {
+    @PostMapping("/categoria/{idCategoria}")
+    public ResponseEntity<?> cadastrar(
+            @PathVariable Long idCategoria,
+            @RequestBody Trabalho trabalho) {
         try {
-            Trabalho salvo = trabalhoService.cadastrar(trabalho);
+            Trabalho salvo = trabalhoService.cadastrar(idCategoria, trabalho);
             return ResponseEntity.status(201).body(salvo);
 
         } catch (RuntimeException e) {
@@ -92,5 +106,4 @@ public class TrabalhoController {
             return ResponseEntity.status(404).body(erro);
         }
     }
-
 }

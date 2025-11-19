@@ -19,6 +19,10 @@ public class Trabalho {
     private String nomeTrabalho;
 
     @Lob
-    @Column(name = "cd_trabalho")
+    @Column(name = "cd_trabalho", nullable = false)
     private String conteudoTrabalho;
+
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private Categoria categoria;
 }

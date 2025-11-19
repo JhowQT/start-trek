@@ -1,11 +1,12 @@
 package fiap.com.br.start_trek.repository;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import fiap.com.br.start_trek.entity.*;
 
 @Repository
-public interface TrabalhoRepository extends JpaRepository<Trabalho, Long>{
-    
+public interface TrabalhoRepository extends JpaRepository<Trabalho, Long> {
+    List<Trabalho> findByCategoriaIdCategoria(Long idCategoria);
 }

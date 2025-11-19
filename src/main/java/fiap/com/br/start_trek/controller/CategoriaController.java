@@ -44,24 +44,6 @@ public class CategoriaController {
         }
     }
 
-    @GetMapping("/trabalho/{idTrabalho}")
-    public ResponseEntity<?> listarPorTrabalho(@PathVariable Long idTrabalho) {
-        try {
-            List<Categoria> lista = categoriaService.listarPorTrabalho(idTrabalho);
-            return ResponseEntity.ok(lista);
-
-        } catch (RuntimeException e) {
-            Map<String, Object> erro = new LinkedHashMap<>();
-            erro.put("message", e.getMessage());
-            return ResponseEntity.status(404).body(erro);
-
-        } catch (Exception e) {
-            Map<String, Object> erro = new LinkedHashMap<>();
-            erro.put("message", "Erro ao buscar categorias por trabalho.");
-            return ResponseEntity.status(500).body(erro);
-        }
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         try {
@@ -75,13 +57,10 @@ public class CategoriaController {
         }
     }
 
-    @PostMapping("/{idTrabalho}")
-    public ResponseEntity<?> criar(
-            @PathVariable Long idTrabalho,
-            @RequestBody Categoria categoria) {
-
+    @PostMapping
+    public ResponseEntity<?> criar(@RequestBody Categoria categoria) {
         try {
-            Categoria salvo = categoriaService.criarCategoria(idTrabalho, categoria);
+            Categoria salvo = categoriaService.criarCategoria(categoria);
             return ResponseEntity.status(201).body(salvo); 
 
         } catch (RuntimeException e) {

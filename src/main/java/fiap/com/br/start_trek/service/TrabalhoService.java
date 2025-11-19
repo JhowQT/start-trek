@@ -13,19 +13,31 @@ import lombok.RequiredArgsConstructor;
 public class TrabalhoService {
     
     private final TrabalhoRepository trabalhoRepository;
+    private final CategoriaRepository categoriaRepository;
 
     public List<Trabalho> listarTodos(){
         return trabalhoRepository.findAll();
     }
 
-    public Trabalho buscarPorID(Long id){
-        return trabalhoRepository.findById(id)
-            .orElseThrow(()-> new RuntimeException("Trabalho não encontrado com este ID: " + id));
+    public List<Trabalho> listarPorCategoria(Long idCategoria){
+        return trabalhoRepository.findByCategoriaIdCategoria(idCategoria);
     }
 
-    public Trabalho cadastrar(Trabalho trabalho){
+    public Trabalho buscarPorID(Long id){
+        return trabalhoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Trabalho não encontrado com este ID: " + id));
+    }
+
+    public Trabalho cadastrar(Long idCategoria, Trabalho trabalho){
+        
+        Categoria categoria = categoriaRepository.findById(idCategoria)
+            .orElseThrow(() -> new RuntimeException("Categoria não encontrada: " + idCategoria));
+        
         validarNomeELimite(trabalho.getNomeTrabalho());
-        validarDuplicidadeDeTitulo(trabalho.getNomeTrabalho(),null);
+        validarDuplicidadeDeTitulo(trabalho.getNomeTrabalho(), null);
+
+        trabalho.setCategoria(categoria);
+
         return trabalhoRepository.save(trabalho);
     }
 
@@ -34,12 +46,20 @@ public class TrabalhoService {
 
         if(novoTrabalho.getNomeTrabalho() != null){
             validarNomeELimite(novoTrabalho.getNomeTrabalho());
-            validarDuplicidadeDeTitulo(novoTrabalho.getNomeTrabalho(),id);
+            validarDuplicidadeDeTitulo(novoTrabalho.getNomeTrabalho(), id);
             existente.setNomeTrabalho(novoTrabalho.getNomeTrabalho());
         }
+
         if(novoTrabalho.getConteudoTrabalho() != null){
             existente.setConteudoTrabalho(novoTrabalho.getConteudoTrabalho());
         }
+
+        if(novoTrabalho.getCategoria() != null){
+            Categoria categoria = categoriaRepository.findById(novoTrabalho.getCategoria().getIdCategoria())
+                .orElseThrow(() -> new RuntimeException("Categoria inválida."));
+            existente.setCategoria(categoria);
+        }
+
         return trabalhoRepository.save(existente);
     }
 
@@ -52,10 +72,10 @@ public class TrabalhoService {
     
     private void validarNomeELimite(String titulo){
         if(titulo == null || titulo.trim().isEmpty()){
-            throw new RuntimeException("Nome para este campo obrigatorio");
+            throw new RuntimeException("Nome para este campo é obrigatório");
         }
         if(titulo.length() > 150){
-            throw new RuntimeException("Limite de 150 caracteres excedido para este campo");
+            throw new RuntimeException("Limite de 150 caracteres excedido");
         }
     }
 
@@ -66,9 +86,7 @@ public class TrabalhoService {
                 && (idAtual == null || !t.getIdTrabalho().equals(idAtual)));
     
         if(duplicado){
-            throw new RuntimeException("Este titulo existe, procure outro");
+            throw new RuntimeException("Este título já existe");
         }
     }
-
-
 }
