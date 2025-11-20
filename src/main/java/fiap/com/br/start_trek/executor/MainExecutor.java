@@ -62,7 +62,7 @@ public class MainExecutor {
 
             System.out.println("\nProcedure de USUÁRIO executada com sucesso!\n");
 
-            /*System.out.println("==============================================");
+            System.out.println("==============================================");
             System.out.println(" PROCEDURE: INSERIR TRABALHO");
             System.out.println("==============================================");
 
@@ -81,10 +81,10 @@ public class MainExecutor {
             comentarioDAO.inserirComentario(
                     "Comentário enviado via DAO.",
                     "kirk@startrek.com",
-                    1  
+                    9  
             );
 
-            System.out.println("\nProcedure de COMENTÁRIO executada com sucesso!\n");*/
+            System.out.println("\nProcedure de COMENTÁRIO executada com sucesso!\n");
 
             System.out.println("==============================================");
             System.out.println(" TODAS AS PROCEDURES EXECUTADAS COM SUCESSO! ");
