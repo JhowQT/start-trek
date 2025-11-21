@@ -35,13 +35,13 @@ Como rodar
 primeiro garanta que você tem o git e o docker instalados na sua maquina, assim como ter o docker desktop aberto
 ```bash
 # 1. Clonar o repositório
-git clone https://github.com/JhowQT/OrangeRoute-Oracle.git .
+git https://github.com/JhowQT/start-trek.git .
 
 # 2. Construir a imagem Docker
-docker build -t="Orange-route" .
+docker build -t="start-trek" .
 
 # 3. Executar o container
-docker run -p 8080:8080 -it --rm Orange-route
+docker run -p 8080:8080 -it --rm start-trek
 ```
 _____________________________________________________________________________________________________
 🧩 Visão Geral
