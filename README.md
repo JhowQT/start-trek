@@ -70,16 +70,14 @@ ________________________________________________________________________________
 
 
 
-## A OrangeRoute API fornece endpoints para gerenciamento de:
+## A Start-Trek API fornece endpoints para gerenciamento de:
 
 ``TIPO_USUARIO``
 ``USUARIO``
-``TRILHA_CARREIRA``
-``TAG_CARREIRA``
-``TAG``
-``FAVORITO``
+``ESP32``
+``TRABALHO``
 ``COMENTARIO``
-``LINK``
+``CATEGORIA``
 
 -- *Arquitetura em camadas Controller → Service → Repository → Entity, com JPA/Hibernate.*
 
@@ -109,24 +107,19 @@ ________________________________________________________________________________
 - **TIPO - USUARIOS** -
 > -
 > - Busca todos os tipo-usuarios **GET**`localhost:8080:tipos-usuario` 
-> - Busca tipo-usuarios por id **GET**`localhost:8080:tipo-usuario/{id}` 
+> - Busca tipo-usuarios por id **GET**`localhost:8080:tipo-usuario/{id}`
+> - Busca tipo-usuarios por id **GET**`localhost:8080:tipo-usuario/todos-tipos`  
 > -
 
 _______________________________________________________________________________________________________
 
-- **TRILHA DE CARREIRA** -
+- **TRABALHOS** -
 > -
-> - Busca todos as trilhas **GET**`localhost:8080:trilhas` 
-> - Busca trilha por ID **GET**`localhost:8080:trilhas/{id}`
-> -
-
-_______________________________________________________________________________________________________
-
-- **FAVORITOS** -
-> -
-> - Busca todos os favoritoss **GET**`localhost:8080:favoritos`  
-> - Busca favoritos ID de usuario **GET**`localhost:8080:favotritos/usuario/{idUsuario}`
-> - Cria favorito **POST**`localhost:8080:favoritos`
+> - Busca todos os trabalho **GET**`localhost:8080:trabalhos`  
+> - Busca trabalho ID de usuario **GET**`localhost:8080:trabalhos/usuario/{idUsuario}`
+> - Busca trabalho por categoria **GET**`localhost:8080:trabalho/categoria/{idCategoria}`
+> - Modifica trabalho por ID **PUT**`localhost:8080/trabalhos/{id}`
+> - Cria favorito **POST**`localhost:8080:trabalhos`
 > - Deleta por ID **DELETE**`localhost:8080:favotiros/{idFavorito}`
 > -
 
@@ -142,41 +135,37 @@ ________________________________________________________________________________
 - **COMENTARIOS** -
 > -
 > - Busca todos os comentarios **GET**`localhost:8080:comentarios` 
-> - Busca ID de Trilha **GET**`localhost:8080:comentarios/trilha/{idTrilha}`
+> - Busca ID de Trilha **GET**`localhost:8080:comentarios/trabalho/{idTrilha}`
 > - Cria Comentario **POST**`localhost:8080:comentarios`
 > -
 
 #### 📥 Corpo da Requisição POST (JSON esperado)
 ```json
 {
-  "idUsuario": 2,
-  "idTrilhaCarreira": 5,
-  "conteudoComentario": "Gostei muito das dicas sobre Java e mercado de trabalho!"
+  {
+  "conteudoComentario": "string",
+  "idTrabalho": 0
+}
+
 }
 ```
 _______________________________________________________________________________________________________
 
-- **TAG** -
-> -
-> - Busca todos os tags **GET**`localhost:8080:tags` 
-> - Busca ID **GET**`localhost:8080:tags/{id}`
-> - Busca ID por Trilha **GET**`localhost:8080:tags/trilha/{idTrilha}`
-> -
 
-_______________________________________________________________________________________________________
-
-- **LINK** -
+- **CATEGORIA** -
 > -
-> - Busca todos os tags **GET**`localhost:8080:links` 
-> - Busca por ID **GET**`localhost:8080:links/{id}`
-> - Busca Id por Trilha **GET**`localhost:8080:links/trilha/{idTrilha}`
+> - Busca todos os tags **GET**`localhost:8080:categorias` 
+> - Busca por ID **GET**`localhost:8080:categorias/{id}`
+> - Cria categoria **POST**`localhost:8080:categorias`
+> - Modifica categoria por ID **PUT**`localhost:8080:categoria/{id}`
+> - Busca Id por Trilha **DELETE**`localhost:8080:categoria/{id}`
 > -
 
 ________________________________________________________________________________________________________
 
 - **LOGIN** -
 > -
-> - Post Login **GET**`localhost:8080:auth/login` 
+> - Post Login **POST**`localhost:8080:auth/login` 
 > -
 #### 📥 Corpo da Requisição POST (JSON esperado)
 ```json
@@ -196,23 +185,6 @@ UI: http://localhost:8080/swagger-ui/index.html
 OpenAPI JSON: http://localhost:8080/v3/api-docs
 
 ________________________________________________________________________________________________________
-
-🧪 Coleções de Teste (Postman/Insomnia)
-
-Coleção Postman: docs/OrangeRoute API.postman_collection.json
-Ambiente Postman: docs/base_url.postman_environment.json
-
-`exports fornecidos dentro do ZIP do arquivo`
-
-base_url = http://localhost:8080
-base_id = 2
-
-Como usar:
-
-Importe a coleção e o ambiente.
-Selecione o ambiente base_url.
-Execute os requests ({{base_url}}/usuarios, etc.).
-___________________________________________________________________________________________________________
 
 🧪 Como Executar Localmente
 Pré-requisitos
@@ -237,15 +209,15 @@ server.port=8080
 
 Executando
 # Clonar o repositório
-- git clone https://github.com/JhowQT/OrangeRoute-Oracle
-- cd OrangeRoute-oracle
+- git clone https://github.com/JhowQT/start-trek.git
+- cd start-trek
 - code .
 
 
 # Rodar a aplicação
 mvn spring-boot:run
 # ou
-mvn clean package && java -jar target/orangeroute-*.jar
+mvn clean package && java -jar target/starttrek=-*.jar
 
 ## ACESSO AO BD
 - Para iniciar o projeto insira o acesso
@@ -258,6 +230,6 @@ Aplicação disponível em:
 
 __________________________________________________________________________________________________________
 ## LINK YT
-- https://youtu.be/affdkYrqqnU
+- https:
 
 
