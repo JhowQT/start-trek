@@ -55,7 +55,7 @@ ________________________________________________________________________________
 <details>
   <summary>📘 MER - Modelo Entidade Relacionamento</summary>
 
-  ![MER](https://github.com/JhowQT/OrangeRoute-Oracle/issues/1#issue-3598042952)
+  ![MER](https://github.com/JhowQT/start-trek/issues/1#issue-3653129261)
 
   _Figura: MER do sistema._
 </details>
@@ -63,7 +63,7 @@ ________________________________________________________________________________
 <details>
   <summary>📗 DER - Diagrama Entidade Relacionamento</summary>
 
-  ![DER](https://github.com/JhowQT/OrangeRoute-Oracle/issues/2#issue-3598052468)
+  ![DER](https://github.com/JhowQT/start-trek/issues/2#issue-3653132589)
 
   _Figura: DER do sistema._
 </details>
